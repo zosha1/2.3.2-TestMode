@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.*;
+
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.open;
 import static ru.netology.testmode.data.DataGenerator.Registration.getRegisteredUser;
@@ -37,7 +39,7 @@ public class AuthTest {
         $("[name=login]").setValue(notRegisteredUser.getLogin());
         $("[name=password]").setValue(notRegisteredUser.getPassword());
         $("[data-test-id=action-login]").click();
-        $("[class=notification__title]").shouldHave(exactText("Ошибка"));
+        $(withText("Неверно указан логин или пароль")).should(visible);
     }
 
     @Test
@@ -47,7 +49,7 @@ public class AuthTest {
         $("[name=login]").setValue(blockedUser.getLogin());
         $("[name=password]").setValue(blockedUser.getPassword());
         $("[data-test-id=action-login]").click();
-        $("[class=notification__title]").shouldHave(exactText("Ошибка"));
+        $(withText("Пользователь заблокирован")).should(visible);
     }
 
     @Test
@@ -58,7 +60,7 @@ public class AuthTest {
         $("[name=login]").setValue(wrongLogin);
         $("[name=password]").setValue(registeredUser.getPassword());
         $("[data-test-id=action-login]").click();
-        $("[class=notification__title]").shouldHave(exactText("Ошибка"));
+        $(withText("Неверно указан логин или пароль")).should(visible);
     }
 
     @Test
@@ -69,6 +71,6 @@ public class AuthTest {
         $("[name=login]").setValue(registeredUser.getLogin());
         $("[name=password]").setValue(wrongPassword);
         $("[data-test-id=action-login]").click();
-        $("[class=notification__title]").shouldHave(exactText("Ошибка"));
+        $(withText("Неверно указан логин или пароль")).should(visible);
     }
 }
